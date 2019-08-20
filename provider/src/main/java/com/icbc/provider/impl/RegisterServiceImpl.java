@@ -45,12 +45,13 @@ public class RegisterServiceImpl implements RegisterService {
     public Boolean batchExportToFile(String path) {
         Boolean flag = false;
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        FileWriter writer = null;
 
         List<Register> registers = registerMapper.selectAll();
         if (registers != null) {
 
             try {
-                FileWriter writer = new FileWriter(path);
+                writer = new FileWriter(path);
                 //for header
                 writeLine(writer, Arrays.asList("order_id", "date_failed", "name", "identity_type, identity_number"));
                 for (Register r : registers) {

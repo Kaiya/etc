@@ -1,10 +1,12 @@
 package com.icbc.provider.impl;
 
+import com.icbc.provider.model.Register;
 import com.icbc.provider.service.AccountService;
 import com.icbc.provider.service.BalanceUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,14 +36,19 @@ public class BalanceUpdateImpl implements BalanceUpdate {
     public Map<String, Object> balanceUpdate(String orderId, String cardId, BigDecimal amount, String clientId, int idenType, String idenNum, String clientName) {
         Map<String, Object> resultMap = new HashMap<>();
 
-        Map<String, Object> map = accountService.updateBalance(cardId, amount);
+        Register register = new Register();
+        register.setName(clientName);
+        register.setIdentityNumber(idenNum);
+        register.setIdentityType(idenType);
+        register.setOrderId(orderId);
+        register.setDateFailed(new Date());
+        Map<String, Object> map = accountService.updateBalance(cardId, amount, register);
 
         BigDecimal balance = (BigDecimal) map.get("balance");
         int payRequestStatus = (int) map.get("payRequestStatus");
-        // TODO: 2019-08-19 编写业务逻辑
         resultMap.put("balance", balance);
-        resultMap.put("orderID", "41241324");
+        resultMap.put("orderID", orderId);
         resultMap.put("payRequestStatus", payRequestStatus);
-        return null;
+        return resultMap;
     }
 }

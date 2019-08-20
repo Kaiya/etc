@@ -1,5 +1,7 @@
 package com.icbc.provider.service;
 
+import com.icbc.provider.model.Register;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -21,5 +23,5 @@ public interface AccountService {
      * @param amount 待扣款数量
      * @return 格式为{"balance":666,"payRequestStatus":1}
      */
-    Map<String, Object> updateBalance(String cardId, BigDecimal amount);
+    Map<String, Object> updateBalance(String cardId, BigDecimal amount, Register register);
 }

@@ -2,7 +2,9 @@ package com.icbc.provider.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.icbc.provider.mapper.AccountMapper;
+import com.icbc.provider.mapper.RegisterMapper;
 import com.icbc.provider.model.Account;
+import com.icbc.provider.model.Register;
 import com.icbc.provider.service.AccountService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +24,9 @@ import java.util.Map;
 public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountMapper accountMapper;
+
+    @Autowired
+    RegisterMapper registerMapper;
 
     private Log log = LogFactory.getLog(AccountServiceImpl.class);
 
@@ -54,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
      * @return 格式为{"balance":666,"payRequestStatus":1}
      */
     @Override
-    public Map<String, Object> updateBalance(String cardId, BigDecimal amount) {
+    public Map<String, Object> updateBalance(String cardId, BigDecimal amount, Register register) {
         Map<String, Object> resultMap = new HashMap<>();
         BigDecimal postBalance = null;
         int payRequestStatus = 0;
@@ -69,19 +74,37 @@ public class AccountServiceImpl implements AccountService {
                     if (accountMapper.updateMoney(account) > 0) {//更新余额成功，返回的是更新成功的记录数
                         postBalance = queryBalance(cardId);
                         payRequestStatus = 1;
+                    } else {
+                        payRequestStatus = 2;
+                        log.info("数据库更新失败... 太健壮了吧");
                     }
                 } else {
                     payRequestStatus = 2;
+                    log.info("余额不够扣款");
                 }
             } else {
                 payRequestStatus = 2;
+                log.info("余额小于0");
             }
 
         } else {
             payRequestStatus = 2;
+            log.info("卡号或金额为空或者金额小于0");
+        }
+
+
+        if (payRequestStatus == 2) { //支付失败，记录到登记簿
+            postBalance = queryBalance(cardId); //就算失败也要去数据库查一下当前余额
+            if (registerMapper.addPayFailed(register) > 0) {
+                resultMap.put("balance", postBalance);
+                resultMap.put("payRequestStatus", payRequestStatus);
+            } else {
+                log.info("支付失败，记录到登记簿也失败。。。");
+            }
         }
         resultMap.put("balance", postBalance);
         resultMap.put("payRequestStatus", payRequestStatus);
+
         return resultMap;
     }
 
