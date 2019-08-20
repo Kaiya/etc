@@ -34,11 +34,14 @@ public class BalanceUpdateImpl implements BalanceUpdate {
     public Map<String, Object> balanceUpdate(String orderId, String cardId, BigDecimal amount, String clientId, int idenType, String idenNum, String clientName) {
         Map<String, Object> resultMap = new HashMap<>();
 
-        BigDecimal balance = accountService.updateBalance(cardId, amount);
+        Map<String, Object> map = accountService.updateBalance(cardId, amount);
+
+        BigDecimal balance = (BigDecimal) map.get("balance");
+        int payRequestStatus = (int) map.get("payRequestStatus");
         // TODO: 2019-08-19 编写业务逻辑
         resultMap.put("balance", balance);
         resultMap.put("orderID", "41241324");
-        resultMap.put("payRequestStatus", 1);
+        resultMap.put("payRequestStatus", payRequestStatus);
         return null;
     }
 }

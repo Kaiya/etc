@@ -56,7 +56,8 @@ public class RegisterServiceImpl implements RegisterService {
                 for (Register r : registers) {
                     List<String> list = new ArrayList<>();
                     list.add(r.getOrderId());
-                    list.add(dateFormat.format(r.getDateFailed()));
+                    String dateTime = dateFormat.format(r.getDateFailed());
+                    list.add(dateTime);
 //                    System.out.println("date:"+dateFormat.format(r.getDateFailed()));
                     list.add(r.getName());
                     list.add(String.valueOf(r.getIdentityType()));

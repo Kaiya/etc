@@ -18,7 +18,9 @@ import java.util.Date;
 public class BatchRegisterCsv implements SchedulingConfigurer {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-    private static final String DEFAULT_CRON = "0/50 * * * * ?";
+//    private static final String DEFAULT_CRON = "0/50 * * * * ?";
+//    每天凌晨3点执行批量任务
+    private static final String DEFAULT_CRON = "0 0 3 1/1 * ?";
     private String cron = DEFAULT_CRON;
 
     @Autowired

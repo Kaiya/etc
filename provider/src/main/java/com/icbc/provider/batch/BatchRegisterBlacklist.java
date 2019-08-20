@@ -22,7 +22,7 @@ public class BatchRegisterBlacklist implements SchedulingConfigurer {
     @Autowired
     BlacklistService blacklistService;
 
-    // TODO: 2019-08-20 增量更新 
+    // TODO: 2019-08-20 增量更新 BlacklistServiceImpl.java 里面
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.addTriggerTask(() -> {

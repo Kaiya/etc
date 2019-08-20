@@ -23,9 +23,8 @@
     <update id="updateMoney">
         update ccia_account
         <set>
-            <if test="moneyRemain != null and moneyRemain != '' ">
+
                 money_remain = #{moneyRemain}
-            </if>
         </set>
         <where>
             <if test="cardId != null and cardId != '' ">
