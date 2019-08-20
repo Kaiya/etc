@@ -21,6 +21,10 @@
         </if>
 
     </select>
+    <select id="selectAll" resultType="blacklist">
+        select <include refid="blacklistField"/>
+        from ccia_blacklist
+    </select>
 
     <insert id="addBlacklist">
         INSERT INTO ccia_blacklist(

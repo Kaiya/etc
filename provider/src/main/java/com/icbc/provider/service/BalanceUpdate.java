@@ -18,7 +18,7 @@ public interface BalanceUpdate {
      * @param idenType   证件类型
      * @param idenNum    证件号码
      * @param clientName 客户姓名
-     * @return 返回值为Map对象，格式为：{"balance":999,"orderID","478123","payRequestStatus",1}
+     * @return 返回值为Map对象，格式为：{"balance":999,"orderID","478123","payRequestStatus":1, "failedReason","xxx"}
      */
     Map<String, Object> balanceUpdate(String orderId, String cardId, BigDecimal amount, String clientId, int idenType, String idenNum, String clientName);
 }

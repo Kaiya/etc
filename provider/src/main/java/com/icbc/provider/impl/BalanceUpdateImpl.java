@@ -30,11 +30,11 @@ public class BalanceUpdateImpl implements BalanceUpdate {
      * @param idenType   证件类型
      * @param idenNum    证件号码
      * @param clientName 客户姓名
-     * @return 返回值为Map对象，格式为：{"balance":999,"orderID","478123","payRequestStatus",1}
+     * @return 返回值为Map对象，格式为：{"balance":999,"orderID","478123","payRequestStatus":1, "failedReason","xxx"}
      */
     @Override
     public Map<String, Object> balanceUpdate(String orderId, String cardId, BigDecimal amount, String clientId, int idenType, String idenNum, String clientName) {
-        Map<String, Object> resultMap = new HashMap<>();
+//        Map<String, Object> resultMap = new HashMap<>();
 
         Register register = new Register();
         register.setName(clientName);
@@ -43,12 +43,16 @@ public class BalanceUpdateImpl implements BalanceUpdate {
         register.setOrderId(orderId);
         register.setDateFailed(new Date());
         Map<String, Object> map = accountService.updateBalance(cardId, amount, register);
+        map.put("orderID", orderId);
+        return map;
 
-        BigDecimal balance = (BigDecimal) map.get("balance");
-        int payRequestStatus = (int) map.get("payRequestStatus");
-        resultMap.put("balance", balance);
-        resultMap.put("orderID", orderId);
-        resultMap.put("payRequestStatus", payRequestStatus);
-        return resultMap;
+//        BigDecimal balance = (BigDecimal) map.get("balance");
+//        int payRequestStatus = (int) map.get("payRequestStatus");
+//        String failedReason = (String) map.get("failedReason");
+//        resultMap.put("balance", balance);
+//        resultMap.put("orderID", orderId);
+//        resultMap.put("payRequestStatus", payRequestStatus);
+//        resultMap.put("failedReason", failedReason);
+//        return resultMap;
     }
 }

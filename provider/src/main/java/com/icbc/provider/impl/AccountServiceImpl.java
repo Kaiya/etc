@@ -63,6 +63,7 @@ public class AccountServiceImpl implements AccountService {
         Map<String, Object> resultMap = new HashMap<>();
         BigDecimal postBalance = null;
         int payRequestStatus = 0;
+        String failedReason = null;
         // card id and amount is not null. !!important!! amount must greater then 0.
         if (cardId != null && amount != null && amount.compareTo(BigDecimal.ZERO) >= 0) {
 
@@ -76,19 +77,23 @@ public class AccountServiceImpl implements AccountService {
                         payRequestStatus = 1;
                     } else {
                         payRequestStatus = 2;
+                        failedReason = "数据库更新失败...";
                         log.info("数据库更新失败... 太健壮了吧");
                     }
                 } else {
                     payRequestStatus = 2;
+                    failedReason = "余额不够扣款";
                     log.info("余额不够扣款");
                 }
             } else {
                 payRequestStatus = 2;
+                failedReason = "余额小于0";
                 log.info("余额小于0");
             }
 
         } else {
             payRequestStatus = 2;
+            failedReason = "卡号或金额为空或者金额小于0";
             log.info("卡号或金额为空或者金额小于0");
         }
 
@@ -100,10 +105,12 @@ public class AccountServiceImpl implements AccountService {
                 resultMap.put("payRequestStatus", payRequestStatus);
             } else {
                 log.info("支付失败，记录到登记簿也失败。。。");
+                failedReason = "支付失败，记录到登记簿也失败";
             }
         }
         resultMap.put("balance", postBalance);
         resultMap.put("payRequestStatus", payRequestStatus);
+        resultMap.put("failedReason", failedReason);
 
         return resultMap;
     }

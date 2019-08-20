@@ -15,7 +15,7 @@ import java.util.Date;
  * @date 2019-08-18
  */
 @Service
-public class BatchRegisterCsv implements SchedulingConfigurer {
+public class BatchBlacklistCsv implements SchedulingConfigurer {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 //    private static final String DEFAULT_CRON = "0/50 * * * * ?";
@@ -32,6 +32,7 @@ public class BatchRegisterCsv implements SchedulingConfigurer {
         taskRegistrar.addTriggerTask(() -> {
             // 定时任务的业务逻辑
             System.out.println("------------------开始执行批量任务------------------");
+
             if (registerService.batchExportToFile("/Users/Kaiya/Desktop/export.csv")) {
                 System.out.println("登记簿导出到csv成功");
             }

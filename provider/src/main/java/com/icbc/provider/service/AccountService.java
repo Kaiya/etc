@@ -21,7 +21,7 @@ public interface AccountService {
      *  更新指定卡号的余额
      * @param cardId 卡号
      * @param amount 待扣款数量
-     * @return 格式为{"balance":666,"payRequestStatus":1}
+     * @return 格式为{"balance":999,"orderID","478123","payRequestStatus":1, "failedReason","xxx"}
      */
     Map<String, Object> updateBalance(String cardId, BigDecimal amount, Register register);
 }
