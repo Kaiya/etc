@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ccps.mapper.UserMapper">
+    <sql id="userFiled">
+        user_id,
+        name,
+        identity_type,
+        identity_number
+    </sql>
+
+    <select id="selectByCardId" resultType="String">
+        select user_id
+        from ccps_card_user
+        where card_id = #{cardId}
+    </select>
+
+    <select id="selectByUserId" resultType="user">
+        select <include refid="userFiled"/>
+        from ccps_user
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectBlackList" resultType="int">
+        select count(*)
+        from ccps_blacklist
+        where name = #{name} and identity_type = #{identityType} and identity_number = #{identityNumber}
+    </select>
+
+    <insert id="insert">
+        insert into ccps_user(
+        user_id,
+        name,
+        identity_type,
+        identity_number)
+        values (
+        #{userId},
+        #{name},
+        #{identityType},
+        #{identityNumber})
+    </insert>
+
+    <delete id="delete">
+        delete from ccps_user where user_id = #{userId}
+    </delete>
+
+    <update id="update">
+        update ccps_user
+        <set>
+            <if test="user_id != null and user_id !=''">
+                user_id = #{userId},
+            </if>
+            <if test="name != null and name !=''">
+                name = #{name},
+            </if>
+            <if test="identity_type != null and identity_type !=''">
+                identity_type = #{identityType},
+            </if>
+            <if test="identity_number != null and identity_number !=''">
+                identity_number = #{identityNumber},
+            </if>
+            <if test="card_id != null and card_id !=''">
+                card_id = #{cardId},
+            </if>
+        </set>
+    </update>
+</mapper>

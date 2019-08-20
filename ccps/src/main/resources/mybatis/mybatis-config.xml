@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--配置关闭缓存-->
+        <setting name="cacheEnabled" value="false"/>
+        <!--使得表字段的下划线自动变成驼峰，就不用写mapper-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--插入数据时生成id-->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!--执行器为重用预处理语句-->
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <!--超时就关闭事务-->
+        <setting name="defaultStatementTimeout" value="600"/>
+    </settings>
+
+    <!--给具体的java实体类定义别名，方便mapper文件的编写-->
+    <typeAliases>
+        <typeAlias type="com.example.ccps.model.User" alias="user"/>
+        <typeAlias type="com.example.ccps.model.Order" alias="order"/>
+    </typeAliases>
+
+    <mappers>
+        <mapper resource="mapper/userMapper.xml"/>
+        <mapper resource="mapper/orderMapper.xml"/>
+    </mappers>
+
+</configuration>

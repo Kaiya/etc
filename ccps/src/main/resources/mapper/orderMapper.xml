@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ccps.mapper.OrderMapper">
+    <!--        命名空间要一致-->
+    <!-- 你猜注释是什么？快捷键是 ctrl+/   -->
+
+
+
+    <sql id="orderField">
+        order_id,
+        card_id,
+        money_cost,
+        order_date,
+        order_status
+    </sql>
+
+    <select id="select" resultType="order">
+        select <include refid="orderField"/>
+        from ccps_order   /*对应数据库表的名称*/
+        <where>
+            <if test="order_id != null and order_id != 0" >
+                and order_id = #{orderId}
+            </if>
+            <if test="card_id != null and card_id != '' ">
+                and card_id = #{cardId}
+            </if>
+            <if test="money_cost != null and money_cost != '' ">
+                and passwd = #{passwd}
+            </if>
+            <if test="order_date != null ">
+                and order_date = #{orderDate}
+            </if>
+            <if test = "order_status != null and order_status!=0">
+                and order_status = #{orderStatus}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO ccps_order(
+        order_id,
+        card_id,
+        money_cost,
+        order_date,
+        order_status)
+        VALUES (
+        #{orderId},
+        #{cardId},
+        #{moneyCost},
+        #{orderDate},
+        #{orderStatus}
+        )
+    </insert>
+
+    <delete id="delete">
+        delete FROM ccps_order where order_id = #{orderId}
+    </delete>
+
+    <update id="update">
+        update ccps_order
+        <set>
+            <if test="card_id != null and card_id != '' ">
+                card_id = #{cardId},
+            </if>
+            <if test="money_cost != null and money_cost != '' ">
+                money_cost = #{moneyCost},
+            </if>
+            <if test="order_date != null and order_date != '' ">
+                order_date = #{orderDate},
+            </if>
+            <if test="order_status != null and order_status != '' ">
+                order_status = #{orderStatus},
+            </if>
+
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+
+</mapper>
