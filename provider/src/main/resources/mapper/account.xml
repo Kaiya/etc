@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icbc.provider.mapper.AccountMapper">
+    <sql id="accountField">
+        card_id,
+        money_remain
+    </sql>
+
+<!--    根据卡号查询账户实体-->
+    <select id="selectByCardId" resultType="account">
+        select
+        <include refid="accountField"/>
+        from ccia_account
+        <if test="cardId != null and cardId != '' ">
+            where card_id = #{cardId}
+        </if>
+
+    </select>
+
+<!--    根据卡号更新余额-->
+    <update id="updateMoney">
+        update ccia_account
+        <set>
+            <if test="moneyRemain != null and moneyRemain != '' ">
+                money_remain = #{moneyRemain}
+            </if>
+        </set>
+        <where>
+            <if test="cardId != null and cardId != '' ">
+                card_id = #{cardId}
+            </if>
+        </where>
+    </update>
+</mapper>

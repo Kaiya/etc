@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icbc.provider.mapper.BlacklistMapper">
+    <sql id="blacklistField">
+        name,
+        identity_type,
+        identity_number,
+        date_banned,
+        reason_banned
+
+    </sql>
+
+    <select id="selectByIdentityNumber" resultType="blacklist">
+        select
+        <include refid="blacklistField"/>
+        from ccia_blacklist
+        <if test="identityNumber != null and identityNumber != '' ">
+            where identity_number = #{identityNumber}
+        </if>
+
+    </select>
+
+    <insert id="addBlacklist">
+        INSERT INTO ccia_blacklist(
+        <include refid="blacklistField"/>
+        )
+        VALUES (
+        #{name},
+        #{identityType},
+        #{identityNumber},
+        #{dateBanned},
+        #{reasonBanned}
+        )
+    </insert>
+
+</mapper>

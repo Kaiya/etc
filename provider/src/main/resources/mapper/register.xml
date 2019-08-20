@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icbc.provider.mapper.RegisterMapper">
+    <sql id="registerField">
+        order_id,
+        date_failed,
+        name,
+        identity_type,
+        identity_number
+    </sql>
+
+    <select id="selectByOrderId" resultType="register">
+        select
+        <include refid="registerField"/>
+        from ccia_pay_failed
+        <if test="orderId != null and orderId != '' ">
+            where order_id = #{orderId}
+        </if>
+
+    </select>
+
+    <select id="selectAll" resultType="register">
+        select
+        <include refid="registerField"/>
+        from ccia_pay_failed
+    </select>
+
+    <insert id="addPayFailed">
+        INSERT INTO ccia_pay_failed(
+        <include refid="registerField"/>
+        )
+        VALUES (
+        #{orderId},
+        #{dateFailed},
+        #{name},
+        #{identityType},
+        #{identityNumber}
+        )
+    </insert>
+
+</mapper>
