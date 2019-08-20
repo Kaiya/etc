@@ -1,6 +1,6 @@
 package com.icbc.provider.batch;
 
-import com.icbc.provider.service.RegisterService;
+import com.icbc.provider.service.BlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
@@ -24,7 +24,7 @@ public class BatchBlacklistCsv implements SchedulingConfigurer {
     private String cron = DEFAULT_CRON;
 
     @Autowired
-    RegisterService registerService;
+    BlacklistService blacklistService;
 
     // TODO: 2019-08-20 增量更新还是全量更新？
     @Override
@@ -33,7 +33,7 @@ public class BatchBlacklistCsv implements SchedulingConfigurer {
             // 定时任务的业务逻辑
             System.out.println("------------------开始执行批量任务------------------");
 
-            if (registerService.batchExportToFile("/Users/Kaiya/Desktop/export.csv")) {
+            if (blacklistService.batchExportToFile("/Users/Kaiya/Desktop/export.csv")) {
                 System.out.println("登记簿导出到csv成功");
             }
 //            System.out.println("动态修改定时任务cron参数，当前时间：" + dateFormat.format(new Date()));
