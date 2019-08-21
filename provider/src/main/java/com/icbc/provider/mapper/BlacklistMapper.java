@@ -1,7 +1,6 @@
 package com.icbc.provider.mapper;
 
 import com.icbc.provider.model.Blacklist;
-import com.icbc.provider.model.Register;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Service;
 

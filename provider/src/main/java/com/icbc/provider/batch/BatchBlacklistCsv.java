@@ -7,9 +7,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * @author Kaiya Xiong

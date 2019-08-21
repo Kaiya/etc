@@ -1,7 +1,5 @@
 package com.icbc.provider.service;
 
-import com.icbc.provider.model.Blacklist;
-
 /**
  * @author Kaiya Xiong
  * @date 2019-08-15
