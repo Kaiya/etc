@@ -40,6 +40,7 @@ public class BlacklistServiceImpl implements BlacklistService {
         List<Register> registers = registerMapper.selectAll();
         if (registers != null) {
             for (Register r : registers) {
+                // TODO: 2019-08-20 duplicate detection
                 //把从登记簿查询出来的每一条记录逐条导入到黑名单里
                 Blacklist blacklist = new Blacklist();
                 blacklist.setName(r.getName());
@@ -47,7 +48,10 @@ public class BlacklistServiceImpl implements BlacklistService {
                 blacklist.setIdentityNumber(r.getIdentityNumber());
                 blacklist.setDateBanned(r.getDateFailed());
                 blacklist.setReasonBanned(1);//加入黑名单原因没有对应。。。
-                blacklistMapper.addBlacklist(blacklist);
+                if (blacklistMapper.selectByIdentityNumber(r.getIdentityNumber()) == null){
+                    blacklistMapper.addBlacklist(blacklist);
+                }
+
             }
             flag = true;
         }

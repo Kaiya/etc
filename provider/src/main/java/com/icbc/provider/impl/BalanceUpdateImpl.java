@@ -1,19 +1,22 @@
 package com.icbc.provider.impl;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.icbc.provider.model.Register;
 import com.icbc.provider.service.AccountService;
 import com.icbc.provider.service.BalanceUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author Kaiya Xiong
  * @date 2019-08-19
  */
+@Service
+@Component
 public class BalanceUpdateImpl implements BalanceUpdate {
 
 

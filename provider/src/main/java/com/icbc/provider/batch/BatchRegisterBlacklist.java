@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,16 +14,18 @@ import java.util.Date;
  * @author Kaiya Xiong
  * @date 2019-08-19
  */
+@Service
 public class BatchRegisterBlacklist implements SchedulingConfigurer {
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-    private static final String DEFAULT_CRON = "0/50 * * * * ?";
+    //    private static final String DEFAULT_CRON = "0/50 * * * * ?";
+    private static final String DEFAULT_CRON = "0 0 3 1/1 * ?";
     private String cron = DEFAULT_CRON;
 
     @Autowired
     BlacklistService blacklistService;
 
     // TODO: 2019-08-20 增量更新 BlacklistServiceImpl.java 里面
+    // TODO: 2019-08-20 两个批量异步执行 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.addTriggerTask(() -> {
@@ -31,7 +34,6 @@ public class BatchRegisterBlacklist implements SchedulingConfigurer {
             if (blacklistService.batchAddBlacklist()) {
                 System.out.println("登记簿记录添加到黑名单成功");
             }
-//            System.out.println("动态修改定时任务cron参数，当前时间：" + dateFormat.format(new Date()));
         }, (triggerContext) -> {
             // 定时任务触发，可修改定时任务的执行周期
             CronTrigger trigger = new CronTrigger(cron);

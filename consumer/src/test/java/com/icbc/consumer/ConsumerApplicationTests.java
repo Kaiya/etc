@@ -24,20 +24,28 @@ public class ConsumerApplicationTests {
     private Log log = LogFactory.getLog(ConsumerApplicationTests.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    @Reference
-    AccountService accountService;
+
     @Reference
     BlacklistService blacklistService;
     @Reference
     RegisterService registerService;
+    @Reference
+    AccountService accountService;
 
     @Test
     public void AccountServiceTest() {
-        BigDecimal balance = accountService.queryBalance("6212261311002888");
+
+        Register register = new Register();
+        register.setName("xiong");
+        register.setDateFailed(new Date());
+        register.setOrderId("43215321532");
+        register.setIdentityType(1);
+        register.setIdentityNumber("34215321532143214");
+        BigDecimal balance = accountService.queryBalance("6212263025530243");
         log.info("balance:" + balance);
 
         // test normal tx
-        Map<String, Object> map = accountService.updateBalance("6212261311002888", BigDecimal.valueOf(2.0));
+        Map<String, Object> map = accountService.updateBalance("6212261311002888", BigDecimal.valueOf(2.0), register);
         balance = (BigDecimal) map.get("balance");
         log.info("balance " + balance);
 
@@ -46,23 +54,21 @@ public class ConsumerApplicationTests {
 //        assert  balance.compareTo(BigDecimal.ZERO) >= 0;
 
         // test terrible tx
-        map = accountService.updateBalance("6212261311002888", BigDecimal.valueOf(-2.0));
+        map = accountService.updateBalance("6212261311002888", BigDecimal.valueOf(-2.0), register);
         balance = (BigDecimal) map.get("balance");
 
-        assert balance == null;
 
         // terrible tx two....
-        map = accountService.updateBalance("6212261311002888", BigDecimal.valueOf(0));
-        balance = (BigDecimal) map.get("balance");
-
-        log.info("terrible balance" + balance);
-//        assert  balance == null;
-
-        // test equal balance
-        map = accountService.updateBalance("6212269847532475", BigDecimal.valueOf(1.0));
-        balance = (BigDecimal) map.get("balance");
-        log.info("equal case: balance:"+balance);
-
+//        map = accountService.updateBalance("6212261311002888", BigDecimal.valueOf(0), register);
+//        balance = (BigDecimal) map.get("balance");
+//
+//        log.info("terrible balance" + balance);
+////        assert  balance == null;
+//
+//        // test equal balance
+//        map = accountService.updateBalance("6212269847532475", BigDecimal.valueOf(1.0), register);
+//        balance = (BigDecimal) map.get("balance");
+//        log.info("equal case: balance:"+balance);
 
 
     }

@@ -100,13 +100,17 @@ public class AccountServiceImpl implements AccountService {
 
         if (payRequestStatus == 2) { //支付失败，记录到登记簿
             postBalance = queryBalance(cardId); //就算失败也要去数据库查一下当前余额
-            if (registerMapper.addPayFailed(register) > 0) {
-                resultMap.put("balance", postBalance);
-                resultMap.put("payRequestStatus", payRequestStatus);
-            } else {
-                log.info("支付失败，记录到登记簿也失败。。。");
+            try {
+                if (registerMapper.addPayFailed(register) > 0) {
+                    resultMap.put("balance", postBalance);
+                    resultMap.put("payRequestStatus", payRequestStatus);
+                }
+            } catch (Exception e) {
+                log.error(e.getCause());
+            } finally {
                 failedReason = "支付失败，记录到登记簿也失败";
             }
+
         }
         resultMap.put("balance", postBalance);
         resultMap.put("payRequestStatus", payRequestStatus);

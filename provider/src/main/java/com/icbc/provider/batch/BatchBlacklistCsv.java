@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * @author Kaiya Xiong
@@ -17,7 +18,6 @@ import java.util.Date;
 @Service
 public class BatchBlacklistCsv implements SchedulingConfigurer {
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 //    private static final String DEFAULT_CRON = "0/50 * * * * ?";
 //    每天凌晨3点执行批量任务
     private static final String DEFAULT_CRON = "0 0 3 1/1 * ?";
@@ -33,10 +33,9 @@ public class BatchBlacklistCsv implements SchedulingConfigurer {
             // 定时任务的业务逻辑
             System.out.println("------------------开始执行批量任务------------------");
 
-            if (blacklistService.batchExportToFile("/Users/Kaiya/Desktop/export.csv")) {
+            if (blacklistService.batchExportToFile("./export.csv")) {
                 System.out.println("登记簿导出到csv成功");
             }
-//            System.out.println("动态修改定时任务cron参数，当前时间：" + dateFormat.format(new Date()));
         }, (triggerContext) -> {
             // 定时任务触发，可修改定时任务的执行周期
             CronTrigger trigger = new CronTrigger(cron);
@@ -50,4 +49,6 @@ public class BatchBlacklistCsv implements SchedulingConfigurer {
         System.out.println("当前cron=" + this.cron + "->将被改变为：" + cron);
         this.cron = cron;
     }
+
+
 }
