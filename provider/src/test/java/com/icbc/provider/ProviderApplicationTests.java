@@ -1,5 +1,7 @@
 package com.icbc.provider;
 
+import com.icbc.provider.mapper.BlacklistMapper;
+import com.icbc.provider.mapper.RegisterMapper;
 import com.icbc.provider.model.Register;
 import com.icbc.provider.service.AccountService;
 import com.icbc.provider.service.BlacklistService;
@@ -10,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -54,6 +58,30 @@ public class ProviderApplicationTests {
         Boolean result = registerService.gotoDarkroom(register);
         assert result == true;
 
+    }
+
+    @Autowired
+    BlacklistMapper blacklistMapper;
+    @Autowired
+    RegisterMapper registerMapper;
+
+    @Test
+    public void testIncremental() {
+
+
+        List<Register> registers = registerMapper.registerLeftJoinBlackList();
+//        Register register1 = new Register("432431132",new Date(),"xkvfdsfy",0,"2432143" );
+//        Register register2 = new Register("4321432132",new Date(),"xdasky",0,"43214" );
+//
+//        registers.add(register1);
+//        registers.add(register2);
+        if (registers.isEmpty()) {
+            System.out.println("没有新增数据");
+        } else {
+            System.out.println("register:" + registers + "size:" + registers.size());
+            int result = blacklistMapper.insertIncrementalBlackList(registers);
+            System.out.println("incremental: " + result);
+        }
     }
 
 

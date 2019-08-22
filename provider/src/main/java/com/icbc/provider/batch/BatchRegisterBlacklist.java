@@ -17,8 +17,8 @@ import java.util.Date;
 @Service
 public class BatchRegisterBlacklist implements SchedulingConfigurer {
 
-        private static final String DEFAULT_CRON = "0/50 * * * * ?";
-//    private static final String DEFAULT_CRON = "0 0 3 1/1 * ?";
+//    private static final String DEFAULT_CRON = "0/50 * * * * ?";
+        private static final String DEFAULT_CRON = "0 0 3 1/1 * ?";
     private String cron = DEFAULT_CRON;
 
     @Autowired
@@ -33,14 +33,10 @@ public class BatchRegisterBlacklist implements SchedulingConfigurer {
         taskRegistrar.addTriggerTask(() -> {
             // 定时任务的业务逻辑
             System.out.println("------------------开始执行批量任务------------------");
-            if (batchService.incrementalUpdateBlackList()){
-                System.out.println("登记簿增量导入到黑名单成功");
-            }else{
-                System.out.println("登记簿增量导入到黑名单失败");
-            }
-//            if (blacklistService.batchAddBlacklist()) {
-//                System.out.println("登记簿记录添加到黑名单成功");
-//            }
+            int result = batchService.incrementalUpdateBlackList();
+            if (result == -1) System.out.println("登记簿没有新增数据");
+            else if (result == 1) System.out.println("登记簿增量导入到黑名单成功");
+            else System.out.println("登记簿增量导入到黑名单失败");
         }, (triggerContext) -> {
             // 定时任务触发，可修改定时任务的执行周期
             CronTrigger trigger = new CronTrigger(cron);

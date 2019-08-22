@@ -2,12 +2,13 @@ package com.example.ccps.imp;
 
 import com.example.ccps.mapper.UserMapper;
 import com.example.ccps.model.User;
-import com.example.ccps.service.CCPSService;
+import com.example.ccps.service.ClientService;
+import com.example.ccps.util.CardIdVerifiy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CCPS implements CCPSService {
+public class ClientImper implements ClientService {
     @Autowired
     private UserMapper userMapper;
 
@@ -60,11 +61,11 @@ public class CCPS implements CCPSService {
             if (blacklist == 1) {
                 System.out.println("用户在黑名单中！");
 //                return "用户在黑名单中！";
-                return 1;
+                return 0;
             } else {
                 System.out.println("用户不在黑名单中，正在生成订单……");
 //                return "用户不在黑名单中，正在生成订单……";
-                return 0;
+                return 1;
             }
         }
     }

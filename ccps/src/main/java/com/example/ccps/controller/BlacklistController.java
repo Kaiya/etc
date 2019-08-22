@@ -4,6 +4,8 @@ import com.example.ccps.bean.Blacklist;
 import com.example.ccps.mapper.BlacklistMapper;
 import com.example.ccps.bean.Blacklist;
 import com.example.ccps.mapper.BlacklistMapper;
+import com.example.ccps.model.Page;
+import com.example.ccps.model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,14 +33,23 @@ public class BlacklistController {
         return blacklistMapper.insertBlacklist(name, identity_type, identity_number,date_banned, reason_banned);
     }
 
-    @GetMapping("/getAll")
-    public List<Blacklist> getAllBlackList(){
+    @GetMapping("/blacklist/getAll")
+    public Response getAllBlackList(){
+        Response res = new Response();
+        int num = 0;
         List<Blacklist> blacklists = blacklistMapper.getAllBkackList();
         for (Blacklist black: blacklists
              ) {
             black.setCreateTime(black.getDate_banned().getTime());
+            num++;
         }
-        return blacklists;
+        res.code = 1;
+        res.msg = "成功";
+        Page page = new Page();
+        page.blacklists = blacklists;
+        page.num = num;
+        res.result = page;
+        return res;
     }
 
 }

@@ -82,12 +82,12 @@ public class AccountServiceImpl implements AccountService {
                     }
                 } else {
                     payRequestStatus = 2;
-                    failedReason = "余额不够扣款";
-                    log.info("余额不够扣款");
+                    failedReason = "额度不足";
+                    log.info("额度不足");
                 }
             } else {
                 payRequestStatus = 2;
-                failedReason = "余额小于0";
+                failedReason = "额度已透支";
                 log.info("余额小于0");
             }
 
@@ -100,16 +100,19 @@ public class AccountServiceImpl implements AccountService {
 
 
         if (payRequestStatus == 2) { //支付失败，记录到登记簿
-            postBalance = queryBalance(cardId); //就算失败也要去数据库查一下当前余额
-            try {
-                if (registerMapper.addPayFailed(register) > 0) {
-                    resultMap.put("balance", postBalance);
-                    resultMap.put("payRequestStatus", payRequestStatus);
+            //检验订单号是否已经在登记簿
+            log.info("exist?: "+registerMapper.selectByOrderId(register.getOrderId()) == null);
+            if (registerMapper.selectByOrderId(register.getOrderId()) == null) { //此订单号已经在登记簿
+                postBalance = queryBalance(cardId); //就算失败也要去数据库查一下当前余额
+                try {
+                    if (registerMapper.addPayFailed(register) > 0) {
+                        resultMap.put("balance", postBalance);
+                        resultMap.put("payRequestStatus", payRequestStatus);
+                    }
+                } catch (Exception e) {
+                    log.error(e.getCause());
+                    failedReason = "支付失败，记录到登记簿也失败";
                 }
-            } catch (Exception e) {
-                log.error(e.getCause());
-            } finally {
-                failedReason = "支付失败，记录到登记簿也失败";
             }
 
         }

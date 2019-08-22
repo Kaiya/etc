@@ -15,6 +15,17 @@ public class Register implements Serializable {
     private int identityType; //证件类型
     private String identityNumber; //证件号码
 
+    public Register(String orderId, Date dateFailed, String name, int identityType, String identityNumber) {
+        this.orderId = orderId;
+        this.dateFailed = dateFailed;
+        this.name = name;
+        this.identityType = identityType;
+        this.identityNumber = identityNumber;
+    }
+    public Register(){
+
+    }
+
     public String getOrderId() {
         return orderId;
     }

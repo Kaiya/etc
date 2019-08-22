@@ -2,7 +2,7 @@ package com.example.ccps.service;
 
 import com.example.ccps.model.User;
 
-public interface CCPSService {
+public interface ClientService {
     //查询卡号是否存在，存在则返回客户编号
     String cardIDCheck(String cardID);
 

@@ -45,6 +45,19 @@
             <version>0.1</version>
         </dependency>
 
+<!--        json web token-->
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.6.0</version>
+        </dependency>
+        <!--        http client-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.4</version>
+        </dependency>
         <!--druid连接池-->
         <dependency>
             <groupId>com.alibaba</groupId>

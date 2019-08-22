@@ -57,17 +57,20 @@ public class BatchServiceImpl implements BatchService {
         return null;
     }
 
+    /**
+     *
+     * @return -1 没有新增数据，0 更新失败，1 更新成功
+     */
     @Override
-    public Boolean incrementalUpdateBlackList() {
+    public int incrementalUpdateBlackList() {
         List<Register> registerList = registerMapper.registerLeftJoinBlackList();
         if (registerList.isEmpty()) {
-            System.out.println("登记簿没有新增数据");
-            return false;
+            return -1;
         } else {
             if (blacklistMapper.insertIncrementalBlackList(registerList) > 0) {
-                return true;
+                return 1;
             } else {
-                return false;
+                return 0;
             }
         }
     }

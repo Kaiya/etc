@@ -1,4 +1,4 @@
-package com.icbc.consumer;
+package com.example.ccps;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
@@ -24,12 +24,16 @@ import java.io.FileReader;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * @author Kaiya Xiong
+ * @date 2019-08-23
+ */
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ConsumerApplicationTests {
+public class UnitTest {
 
-    private Log log = LogFactory.getLog(ConsumerApplicationTests.class);
+    private Log log = LogFactory.getLog(UnitTest.class);
 
     @Reference
     RegisterService registerService;
@@ -171,9 +175,10 @@ public class ConsumerApplicationTests {
         }
     }
 
+
     @Test
     public void incrementalTest() {
-        if (batchService.incrementalUpdateBlackList()) {
+        if (batchService.incrementalUpdateBlackList() == 1) {
             log.info("增量更新成功");
         } else {
             log.info("增量更新失败");
@@ -182,3 +187,4 @@ public class ConsumerApplicationTests {
 
 
 }
+

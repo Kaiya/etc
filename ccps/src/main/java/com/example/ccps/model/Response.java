@@ -1,11 +1,7 @@
 package com.example.ccps.model;
 
-import com.example.ccps.model.PayResult;
-
-import java.util.List;
-
-public class Response {
+public class Response <T> {
     public int code;
     public String msg;
-    public PayResult result;
+    public T result;
 }

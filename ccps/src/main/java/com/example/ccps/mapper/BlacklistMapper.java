@@ -34,4 +34,5 @@ public interface BlacklistMapper {
             @Result(property = "reason_banned", column = "reason_banned", javaType = Integer.class)
     })
     public List<Blacklist> getAllBkackList();
+
 }
