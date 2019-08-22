@@ -22,7 +22,8 @@
 
     </select>
     <select id="selectAll" resultType="blacklist">
-        select <include refid="blacklistField"/>
+        select
+        <include refid="blacklistField"/>
         from ccia_blacklist
     </select>
 
@@ -37,6 +38,20 @@
         #{dateBanned},
         #{reasonBanned}
         )
+    </insert>
+
+    <insert id="insertIncrementalBlackList" parameterType="java.util.List">
+        insert into ccia_blacklist
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.name},
+            #{item.identity_type},
+            #{item.identity_number},
+            now(),
+            0
+            )
+        </foreach>
     </insert>
 
 </mapper>

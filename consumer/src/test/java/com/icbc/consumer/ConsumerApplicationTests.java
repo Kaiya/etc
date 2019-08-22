@@ -3,6 +3,7 @@ package com.icbc.consumer;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.icbc.provider.model.Register;
 import com.icbc.provider.service.AccountService;
+import com.icbc.provider.service.BatchService;
 import com.icbc.provider.service.BlacklistService;
 import com.icbc.provider.service.RegisterService;
 import org.apache.commons.logging.Log;
@@ -15,6 +16,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -39,6 +41,8 @@ public class ConsumerApplicationTests {
     RegisterService registerService;
     @Reference
     AccountService accountService;
+    @Reference
+    BatchService batchService;
 
 
     @Test
@@ -180,6 +184,15 @@ public class ConsumerApplicationTests {
             }
         }
 
+    }
+
+    @Test
+    public void incrementalTest() {
+        if (batchService.incrementalUpdateBlackList()) {
+            log.info("增量更新成功");
+        } else {
+            log.info("增量更新失败");
+        }
     }
 
 

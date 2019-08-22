@@ -95,6 +95,7 @@ public class AccountServiceImpl implements AccountService {
             payRequestStatus = 2;
             failedReason = "卡号或金额为空或者金额小于0";
             log.info("卡号或金额为空或者金额小于0");
+
         }
 
 

@@ -47,7 +47,7 @@ public class BlacklistServiceImpl implements BlacklistService {
                 blacklist.setIdentityType(r.getIdentityType());
                 blacklist.setIdentityNumber(r.getIdentityNumber());
                 blacklist.setDateBanned(r.getDateFailed());
-                blacklist.setReasonBanned(1);//加入黑名单原因没有对应。。。
+                blacklist.setReasonBanned(0);//加入黑名单原因没有对应。。。
                 if (blacklistMapper.selectByIdentityNumber(r.getIdentityNumber()) == null){
                     blacklistMapper.addBlacklist(blacklist);
                 }

@@ -18,4 +18,10 @@ public interface RegisterMapper {
     int addPayFailed(Register register);
 
     List<Register> selectAll();
+
+    /**
+     * 增量查询登记簿 使用左连接的方式
+     * @return
+     */
+    List<Register> registerLeftJoinBlackList();
 }
