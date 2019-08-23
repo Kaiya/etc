@@ -1,28 +1,38 @@
 package com.example.ccps.util;
 
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.KeyGenerator;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Key;
 import java.security.SecureRandom;
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
 
 public class EncryptUtil {
     private Key key;
 
     public EncryptUtil(String str) {
-        getKey(str);  //生成密匙
+        genKey(str);  //生成密匙
+        //给种子就重新生成新的密钥
 
+
+    }
+
+    public EncryptUtil(Key key) {
+        this.key = key;//给密钥就设置密钥
+    }
+
+    public Key getKey() {
+        return key;
     }
 
     /**
      * * 根据参数生成KEY  
      */
-    public void getKey(String strKey) {
+    public void genKey(String strKey) {
 
         try {
             KeyGenerator _generator = KeyGenerator.getInstance("DES");
@@ -32,6 +42,7 @@ public class EncryptUtil {
         } catch (Exception e) {
             throw new RuntimeException("Error initializing key " + e);
         }
+
     }
 
     /**
@@ -98,9 +109,11 @@ public class EncryptUtil {
         is.close();
     }
 
+
     public static void main(String[] args) throws Exception {
         EncryptUtil td = new EncryptUtil("aaa");
-        td.encrypt("d:/test/ccia_account.csv", "d:/test/ccia_account加密.csv");//加密
-        td.decrypt("d:/test/ccia_account加密.csv", "d:/test/ccia_account解密.csv"); //解密  
+        td.encrypt("/Users/Kaiya/Desktop/testcase.csv", "/Users/Kaiya/Desktop/testcase_encrypt.csv");//加密
+        EncryptUtil mytd = new EncryptUtil(td.key);
+        mytd.decrypt("/Users/Kaiya/Desktop/testcase_encrypt.csv", "/Users/Kaiya/Desktop/testcase_decrypt.csv"); //解密  
     }
 }
