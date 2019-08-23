@@ -2,10 +2,13 @@ package com.example.ccps;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
+import com.example.ccps.util.SFTPClient;
 import com.icbc.provider.model.Register;
 import com.icbc.provider.service.AccountService;
 import com.icbc.provider.service.BatchService;
 import com.icbc.provider.service.RegisterService;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -182,6 +185,19 @@ public class UnitTest {
             log.info("增量更新成功");
         } else {
             log.info("增量更新失败");
+        }
+    }
+
+    @Test
+    public void SftpTest(){
+        SFTPClient sftpClient = new SFTPClient("192.168.103.251",2223, "test", "qwert123");
+        try {
+            sftpClient.connect();
+            sftpClient.upload("/Users/Kaiya/Desktop/testcase.csv","./sftptrans_testcase.csv");
+        } catch (JSchException e) {
+            e.printStackTrace();
+        } catch (SftpException e){
+            e.printStackTrace();
         }
     }
 

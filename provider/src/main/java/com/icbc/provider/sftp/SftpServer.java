@@ -30,12 +30,12 @@ public class SftpServer {
 
     private void start() throws IOException {
         SshServer sshd = SshServer.setUpDefaultServer();
-        sshd.setHost("127.0.0.1");//server host ip
+        sshd.setHost("0.0.0.0");//server host ip
         sshd.setPort(2223);//server port
         sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(new File("host.ser")));
         sshd.setSubsystemFactories(Collections.singletonList(new SftpSubsystemFactory()));
         //sftp登陆使用的用户名和密码
-        sshd.setPasswordAuthenticator((username, password, session) -> username.equals("kaiya") && password.equals("qwert123"));
+        sshd.setPasswordAuthenticator((username, password, session) -> username.equals("test") && password.equals("qwert123"));
         //authorized keys for public private key auth. 存储ftp客户端的公钥文件
         sshd.setPublickeyAuthenticator(new AuthorizedKeysAuthenticator(new File("./authorized_keys")));
         sshd.start();

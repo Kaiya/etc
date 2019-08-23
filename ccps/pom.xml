@@ -58,6 +58,11 @@
             <artifactId>httpclient</artifactId>
             <version>4.3.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+        </dependency>
         <!--druid连接池-->
         <dependency>
             <groupId>com.alibaba</groupId>

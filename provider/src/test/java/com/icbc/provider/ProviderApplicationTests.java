@@ -4,6 +4,7 @@ import com.icbc.provider.mapper.BlacklistMapper;
 import com.icbc.provider.mapper.RegisterMapper;
 import com.icbc.provider.model.Register;
 import com.icbc.provider.service.AccountService;
+import com.icbc.provider.service.BalanceUpdate;
 import com.icbc.provider.service.BlacklistService;
 import com.icbc.provider.service.RegisterService;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +28,13 @@ public class ProviderApplicationTests {
     BlacklistService blacklistService;
     @Autowired
     RegisterService registerService;
+
+    @Autowired
+    BalanceUpdate balanceUpdate;
+@Test
+public void test(){
+    balanceUpdate.balanceUpdate("11111","1111",new BigDecimal("123"),"123",1,"12334444","111");
+}
 
 
     @Test

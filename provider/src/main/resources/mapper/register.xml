@@ -29,12 +29,14 @@
 
     <!--  增量查询登记簿，用于批量导入黑名单  -->
     <select id="registerLeftJoinBlackList" resultType="register">
-        select p.*
+        select distinct p.name, p.identity_type, p.identity_number
         from ccia_pay_failed as p
         left join ccia_blacklist as b
         on p.name = b.name and p.identity_type = b.identity_type and p.identity_number = b.identity_number
         where b.name is null
     </select>
+
+
 
     <insert id="addPayFailed">
         INSERT INTO ccia_pay_failed(
