@@ -24,9 +24,9 @@ import java.util.Map;
 public class OrderImper implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
-    @Reference
+    @Reference(loadbalance = "roundrobin")
     BalanceUpdate balanceUpdate;
-    @Reference
+    @Reference(loadbalance = "roundrobin")
     AccountService accountService;
     @Autowired
     ClientImper clientImper;

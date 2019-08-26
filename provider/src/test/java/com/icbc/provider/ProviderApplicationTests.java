@@ -41,13 +41,13 @@ public class ProviderApplicationTests {
     @Autowired
     BalanceUpdate balanceUpdate;
 
-    @Test
+//    @Test
     public void test() {
         balanceUpdate.balanceUpdate("11111", "1111", new BigDecimal("123"), "123", 1, "12334444", "111");
     }
 
 
-    @Test
+//    @Test
     public void testAccount() {
 //        String cardId = "6212261311002888";
 //        Boolean updateResult = false;
@@ -60,13 +60,13 @@ public class ProviderApplicationTests {
 //        System.out.println(updateResult);
     }
 
-    @Test
+//    @Test
     public void testBlacklist() {
 
 
     }
 
-    @Test
+//    @Test
     public void testRegister() {
         Register register = new Register();
         register.setName("kaiya");
@@ -84,7 +84,7 @@ public class ProviderApplicationTests {
     @Autowired
     RegisterMapper registerMapper;
 
-    @Test
+//    @Test
     public void testIncremental() {
 
 
@@ -103,7 +103,7 @@ public class ProviderApplicationTests {
         }
     }
 
-    @Test
+//    @Test
     public void testEncryption() throws Exception {
         String originCsv = "";
         String encryptCsv = "";

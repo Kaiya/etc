@@ -1,6 +1,7 @@
 package com.icbc.provider.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.dubbo.rpc.RpcContext;
 import com.icbc.provider.mapper.AccountMapper;
 import com.icbc.provider.mapper.RegisterMapper;
 import com.icbc.provider.model.Account;
@@ -121,6 +122,12 @@ public class AccountServiceImpl implements AccountService {
         resultMap.put("failedReason", failedReason);
 
         return resultMap;
+    }
+
+    @Override
+    public String testLoadbalance() {
+        String serverip = RpcContext.getContext().getLocalAddressString();
+        return serverip;
     }
 
 }
