@@ -23,13 +23,13 @@ before_install:
 after_success:
 #upload to server
 - scp -o stricthostkeychecking=no -r ./provider/target/provider-0.0.1-SNAPSHOT.jar xiongkaiya@worker1.kaiya.ml:/home/xiongkaiya
-- ssh -i ~/.ssh/ss xiongkaiya@worker1.kaiya.ml "kill -s KILL $(pidof provider-0.0.1-SNAPSHOT.jar); nohup java -jar provider-0.0.1-SNAPSHOT.jar > run.log 2>&1 & "
+- ssh -i ~/.ssh/ss xiongkaiya@worker1.kaiya.ml "kill -s KILL \$(ps -aux | grep java | awk '{print \$2}'); nohup java -jar provider-0.0.1-SNAPSHOT.jar > run.log 2>&1 & "
 - scp -o stricthostkeychecking=no -r ./provider/target/provider-0.0.1-SNAPSHOT.jar xiongkaiya@worker2.kaiya.ml:/home/xiongkaiya
-- ssh -i ~/.ssh/ss xiongkaiya@worker2.kaiya.ml "kill -s KILL $(pidof provider-0.0.1-SNAPSHOT.jar); nohup java -jar provider-0.0.1-SNAPSHOT.jar > run.log 2>&1 & "
+- ssh -i ~/.ssh/ss xiongkaiya@worker2.kaiya.ml "kill -s KILL \$(ps -aux | grep java | awk '{print \$2}'); nohup java -jar provider-0.0.1-SNAPSHOT.jar > run.log 2>&1 & "
 - scp -o stricthostkeychecking=no -r ./ccps/target/ccps-0.0.1-SNAPSHOT.jar xiongkaiya@worker3.kaiya.ml:/home/xiongkaiya
-- ssh -i ~/.ssh/ss xiongkaiya@worker3.kaiya.ml "kill -s KILL $(pidof ccps-0.0.1-SNAPSHOT.jar); nohup java -jar ccps-0.0.1-SNAPSHOT.jar > run.log 2>&1 & "
+- ssh -i ~/.ssh/ss xiongkaiya@worker3.kaiya.ml "kill -s KILL \$(ps -aux | grep java | awk '{print \$2}'); nohup java -jar ccps-0.0.1-SNAPSHOT.jar > run.log 2>&1 & "
 - scp -o stricthostkeychecking=no -r ./ccps/target/ccps-0.0.1-SNAPSHOT.jar xiongkaiya@worker4.kaiya.ml:/home/xiongkaiya
-- ssh -i ~/.ssh/ss xiongkaiya@worker4.kaiya.ml "kill -s KILL $(pidof ccps-0.0.1-SNAPSHOT.jar); nohup java -jar ccps-0.0.1-SNAPSHOT.jar > run.log 2>&1 & "
+- ssh -i ~/.ssh/ss xiongkaiya@worker4.kaiya.ml "kill -s KILL \$(ps -aux | grep java | awk '{print \$2}'); nohup java -jar ccps-0.0.1-SNAPSHOT.jar > run.log 2>&1 & "
 
 #publish as docker images
 #- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
