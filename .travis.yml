@@ -20,8 +20,8 @@ env:
 #      secure: $SONAR_TOKEN
 
 script:
-  - cd provider && ./mvnw clean install -B
-  - cd ../ccps && .mvnw clean install -B
+  - cd provider && ./mvnw clean install -B -Dmaven.test.skip=true
+  - cd ccps && .mvnw clean install -B -Dmaven.test.skip=true
 #  - ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
 
 
