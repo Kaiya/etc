@@ -28,10 +28,14 @@ script:
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
-  - export IMAGE_NAME=kyawn/etc
-  - docker build -t $IMAGE_NAME:$COMMIT .
-  - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
-  - docker push $IMAGE_NAME
+  - export PROVIDER_IMAGE_NAME=kaiya/ccia
+  - export CCPS_IMAGE_NAME=kaiya/ccps
+  - docker build -t $PROVIDER_IMAGE_NAME:$COMMIT ./provider
+  - docker build -t $CCPS_IMAGE_NAME:$COMMIT ./ccps
+  - docker tag $PROVIDER_IMAGE_NAME:$COMMIT $PROVIDER_IMAGE_NAME:$TAG
+  - docker tag $CCPS_IMAGE_NAME:$COMMIT $CCPS_IMAGE_NAME:$TAG
+  - docker push $PROVIDER_IMAGE_NAME
+  - docker push $CCPS_IMAGE_NAME
 
 #deploy:
 #  provider: heroku
