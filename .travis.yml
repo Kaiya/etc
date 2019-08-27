@@ -1,43 +1,37 @@
 sudo: required
 language: java
 jdk: oraclejdk8
-
 services:
-  - docker
-
+- docker
 env:
   global:
-#    - secure: "encrypted-sonar-token"
-    - secure: "encrypted-dockerhub-username"
-    - secure: "encrypted-dockerhub-password"
-#    - secure: "encrypted-heroku-api-key"
-    - COMMIT=${TRAVIS_COMMIT::7}
-
-#addons:
-#  sonarcloud:
-#    organization: "sivaprasadreddy-github"
-#    token:
-#      secure: $SONAR_TOKEN
-
+  - secure: encrypted-dockerhub-username
+  - secure: encrypted-dockerhub-password
+  - COMMIT=${TRAVIS_COMMIT::7}
 script:
-  - cd provider && ./mvnw clean install -B -Dmaven.test.skip=true
-  - cd ../ccps && ./mvnw clean install -B -Dmaven.test.skip=true && cd ..
-#  - ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
-
-
+- cd provider && ./mvnw clean install -B -Dmaven.test.skip=true
+- cd ../ccps && ./mvnw clean install -B -Dmaven.test.skip=true && cd ..
+before_install:
+- openssl aes-256-cbc -K $encrypted_50b46e0a95cc_key -iv $encrypted_50b46e0a95cc_iv
+    -in ss.enc -out ~/.ssh/ss -d
+- chmod 600 ~/.ssh/ss
 after_success:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
-  - export PROVIDER_IMAGE_NAME=kaiya/ccia
-  - export CCPS_IMAGE_NAME=kaiya/ccps
-  - docker build -t $PROVIDER_IMAGE_NAME:$COMMIT ./provider
-  - docker build -t $CCPS_IMAGE_NAME:$COMMIT ./ccps
-  - docker tag $PROVIDER_IMAGE_NAME:$COMMIT $PROVIDER_IMAGE_NAME:$TAG
-  - docker tag $CCPS_IMAGE_NAME:$COMMIT $CCPS_IMAGE_NAME:$TAG
-  - docker push $PROVIDER_IMAGE_NAME
-  - docker push $CCPS_IMAGE_NAME
+#upload to server
+- scp -o stricthostkeychecking=no -r ./provider/target/provider-0.0.1-SNAPSHOT.jar xiongkaiya@worker1.kaiya.ml:/home/xiongkaiya
+- scp -o stricthostkeychecking=no -r ./provider/target/provider-0.0.1-SNAPSHOT.jar xiongkaiya@worker2.kaiya.ml:/home/xiongkaiya
+- scp -o stricthostkeychecking=no -r ./provider/target/ccps-0.0.1-SNAPSHOT.jar xiongkaiya@worker3.kaiya.ml:/home/xiongkaiya
+- scp -o stricthostkeychecking=no -r ./provider/target/ccps-0.0.1-SNAPSHOT.jar xiongkaiya@worker4.kaiya.ml:/home/xiongkaiya
+#publish as docker images
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH;
+  fi`
+- export PROVIDER_IMAGE_NAME=kaiya/ccia
+- export CCPS_IMAGE_NAME=kaiya/ccps
+- docker build -t $PROVIDER_IMAGE_NAME:$COMMIT ./provider
+- docker build -t $CCPS_IMAGE_NAME:$COMMIT ./ccps
+- docker tag $PROVIDER_IMAGE_NAME:$COMMIT $PROVIDER_IMAGE_NAME:$TAG
+- docker tag $CCPS_IMAGE_NAME:$COMMIT $CCPS_IMAGE_NAME:$TAG
+- docker push $PROVIDER_IMAGE_NAME
+- docker push $CCPS_IMAGE_NAME
 
-#deploy:
-#  provider: heroku
-#  api_key: $HEROKU_API_KEY
-#  app: jblogger
+#- echo -e "Host 主机IP地址\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/ss" >> ~/.ssh/config
