@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoadBalancerController {
     @Reference(loadbalance = "roundrobin")
     AccountService accountService;
+    @RequestMapping(value = "/test")
     public String testLb (){
         return accountService.testLoadbalance();
     }

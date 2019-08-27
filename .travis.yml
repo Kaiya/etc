@@ -1,0 +1,39 @@
+sudo: required
+language: java
+jdk: oraclejdk8
+
+services:
+  - docker
+
+env:
+  global:
+#    - secure: "encrypted-sonar-token"
+    - secure: "encrypted-dockerhub-username"
+    - secure: "encrypted-dockerhub-password"
+#    - secure: "encrypted-heroku-api-key"
+    - COMMIT=${TRAVIS_COMMIT::7}
+
+#addons:
+#  sonarcloud:
+#    organization: "sivaprasadreddy-github"
+#    token:
+#      secure: $SONAR_TOKEN
+
+script:
+  - cd provider && ./mvnw clean install -B
+  - cd ../ccps && .mvnw clean install -B
+#  - ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+
+
+after_success:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+  - export IMAGE_NAME=kyawn/etc
+  - docker build -t $IMAGE_NAME:$COMMIT .
+  - docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
+  - docker push $IMAGE_NAME
+
+#deploy:
+#  provider: heroku
+#  api_key: $HEROKU_API_KEY
+#  app: jblogger
