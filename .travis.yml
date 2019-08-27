@@ -21,12 +21,12 @@ env:
 
 script:
   - cd provider && ./mvnw clean install -B -Dmaven.test.skip=true
-  - cd ../ccps && ./mvnw clean install -B -Dmaven.test.skip=true
+  - cd ../ccps && ./mvnw clean install -B -Dmaven.test.skip=true && cd ..
 #  - ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
 
 
 after_success:
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
   - export PROVIDER_IMAGE_NAME=kaiya/ccia
   - export CCPS_IMAGE_NAME=kaiya/ccps
