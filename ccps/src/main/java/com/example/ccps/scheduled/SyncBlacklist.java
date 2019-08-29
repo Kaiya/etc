@@ -6,7 +6,6 @@ import com.example.ccps.util.SFTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,8 +27,10 @@ public class SyncBlacklist {
             String host = "worker1.kaiya.ml";
 //            String host = "worker2.kaiya.ml";
             SFTPClient sftpClient = new SFTPClient(host, 2223, "test", "qwert123");
-            String ccia_csvPath = "provider/target/classes/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
-            String ccps_csvPath = "ccps/target/classes/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
+//            String ccia_csvPath = "provider/target/classes/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
+//            String ccps_csvPath = "ccps/target/classes/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
+            String ccia_csvPath = "/home/xiongkaiya/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
+            String ccps_csvPath = "/home/xiongkaiya/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
 
             // TODO: 2019-08-29  SFTP client download files
             sftpClient.connect();

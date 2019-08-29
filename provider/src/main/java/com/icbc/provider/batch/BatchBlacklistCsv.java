@@ -36,7 +36,8 @@ public class BatchBlacklistCsv implements SchedulingConfigurer {
 //
 //            String pathPrefix = this.getClass().getResource("/csv/").getPath();
 //            String csvPath = pathPrefix + "ccia_blacklist_" + df.format(new Date()) + ".csv";
-            String ccia_csvPath = "./provider/target/classes/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
+//            String ccia_csvPath = "./provider/target/classes/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
+            String ccia_csvPath = "/home/xiongkaiya/csv/ccia_blacklist_" + df.format(new Date()) + ".csv";
 //            System.out.println("csv path: " + csvPath);
             if (blacklistService.batchExportToFile(ccia_csvPath)) {
                 System.out.println("黑名单导出到csv成功");
