@@ -17,8 +17,8 @@ import java.util.Date;
 @Service
 public class BatchRegisterBlacklist implements SchedulingConfigurer {
 
-//    private static final String DEFAULT_CRON = "0/50 * * * * ?";
-        private static final String DEFAULT_CRON = "0 0 3 1/1 * ?";
+    private static final String DEFAULT_CRON = "0/50 * * * * ?";
+//        private static final String DEFAULT_CRON = "0 0 3 1/1 * ?";
     private String cron = DEFAULT_CRON;
 
     @Autowired

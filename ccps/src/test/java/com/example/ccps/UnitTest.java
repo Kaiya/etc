@@ -11,6 +11,7 @@ import com.icbc.provider.service.BatchService;
 import com.icbc.provider.service.RegisterService;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -24,15 +25,16 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.math.BigDecimal;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -215,9 +217,14 @@ public class UnitTest {
         //生成公私钥对
         String str = "aaa";
         KeyPair keyPair = RSA.getKeyPair();
-        String publicKeyStr = RSA.getPublicKey(keyPair);
-        String privateKeyStr = RSA.getPrivateKey(keyPair);
+        //读公钥文件
+        String pkPath = this.getClass().getResource("/key/id_rsa.pub").getPath();
+        String publicKeyStr = FileUtils.readFileToString(new File(pkPath),"UTF-8");
         PublicKey publicKey = RSA.string2PublicKey(publicKeyStr);
+//        String publicKeyStr = RSA.getPublicKey(keyPair);
+
+        String privateKeyStr = RSA.getPrivateKey(keyPair);
+
         //用公钥加密
         byte[] publicEncrypt = RSA.publicEncrypt(str.getBytes(), publicKey);
         //加密后的内容Base64编码
@@ -239,6 +246,9 @@ public class UnitTest {
         String key = new String(privateDecrypt);
         System.out.println("plain text: " + key);
         //文件的解密
+        byte[] decodedKey = key.getBytes();
+        Key originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");//即为原始的key
+
         EncryptUtil encCCPS = new EncryptUtil(key);
         encCCPS.decrypt("/Users/Kaiya/Desktop/test_encrypt.csv", "/Users/Kaiya/Desktop/test_decrypt.csv");
 
@@ -255,10 +265,19 @@ public class UnitTest {
          * 3.CCIA使用密钥通过DES加密csv文件得到密文CT_csv。CCIA把密文CT_key和CT_csv通过SFTP传输给CCPS。
          * 4.CCPS拿到密文CT_key和CT_csv，首先使用自己的私钥sk解密CT_key，得到明文密钥PT_key(aka. key)。然后使用明文密钥key对密文CT_csv文件解密得到csv文件的明文信息。
          */
-        //CCPS生成公私钥对，通过SFTPClient把公钥put给CCIA
-        KeyPair keyPair = RSA.getKeyPair();
         SFTPClient client = new SFTPClient("127.0.0.1", 2333, "test", "qwert123");
         client.connect();
+        //读公钥文件
+        String pkPath = this.getClass().getResource("/key/id_rsa.pub").getPath();
+        //把公钥传给CCIA
+        client.upload(pkPath,"./provider/target/classes/key/");
+
+        String publicKeyStr = FileUtils.readFileToString(new File(pkPath),"UTF-8");
+        PublicKey publicKey = RSA.string2PublicKey(publicKeyStr);
+
+        //CCPS生成公私钥对，通过SFTPClient把公钥put给CCIA
+        KeyPair keyPair = RSA.getKeyPair();
+
         client.upload("", ""); //todo 公钥字符串生成文件
         //等CCIA生成好密文。。可以睡一会儿。。。
         Thread.sleep(3000);
@@ -284,6 +303,35 @@ public class UnitTest {
         encCCPS.decrypt(encryptCsv, decryptCsv);//得到解密的文件
 
     }
+    @Test
+    public void testSFTP() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+        SFTPClient sftpClient = new SFTPClient("127.0.0.1", 2223, "test", "qwert123");
+        String pathPrefix = this.getClass().getResource("/csv/").getPath();
+        String csvPath = pathPrefix + "ccia_blacklist_" + df.format(new Date()) + ".csv";
+        try {
+            sftpClient.connect();
+//            sftpClient.upload("/Users/Kaiya/Desktop/testcase.csv", "./sftptrans_testcase.csv");
+            sftpClient.download(csvPath,"/Users/Kaiya/Desktop/csvTest/my.csv");
+        } catch (JSchException e) {
+            e.printStackTrace();
+        } catch (SftpException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testKey(){
+        try {
+            KeyPair keyPair = RSA.getKeyPair();
+            FileUtils.writeStringToFile(new File("./id_rsa.pub"), RSA.getPublicKey(keyPair));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
 
 

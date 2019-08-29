@@ -72,14 +72,14 @@ public class BlacklistServiceImpl implements BlacklistService {
             try {
                 writer = new FileWriter(path);
                 //for header
-                writeLine(writer, Arrays.asList("order_id", "date_failed", "name", "identity_type, identity_number"));
+                writeLine(writer, Arrays.asList("name","identity_type","identity_number","date_banned","reason_banned"));
                 for (Blacklist b : blacklists) {
                     List<String> list = new ArrayList<>();
                     list.add(b.getName());
                     list.add(String.valueOf(b.getIdentityType()));
                     list.add(b.getIdentityNumber());
-                    list.add(String.valueOf(b.getReasonBanned()));
                     list.add(dateFormat.format(b.getDateBanned()));
+                    list.add(String.valueOf(b.getReasonBanned()));
                     writeLine(writer, list);
                 }
                 writer.flush();

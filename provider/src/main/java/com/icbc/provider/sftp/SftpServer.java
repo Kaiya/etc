@@ -2,6 +2,8 @@ package com.icbc.provider.sftp;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.sshd.common.file.FileSystemFactory;
+import org.apache.sshd.common.session.Session;
 import org.apache.sshd.server.SshServer;
 import org.apache.sshd.server.config.keys.AuthorizedKeysAuthenticator;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystem;
 import java.util.Collections;
 
 /**
@@ -38,6 +41,7 @@ public class SftpServer {
         sshd.setPasswordAuthenticator((username, password, session) -> username.equals("test") && password.equals("qwert123"));
         //authorized keys for public private key auth. 存储ftp客户端的公钥文件
         sshd.setPublickeyAuthenticator(new AuthorizedKeysAuthenticator(new File("./authorized_keys")));
+
         sshd.start();
         log.info("SFTP server started");
     }

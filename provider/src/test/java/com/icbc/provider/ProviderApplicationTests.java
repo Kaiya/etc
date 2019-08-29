@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
 import java.math.BigDecimal;
 import java.security.Key;
 import java.security.KeyPair;
@@ -129,10 +130,17 @@ public class ProviderApplicationTests {
         //加密后的内容Base64编码
         String CT_key = RSA.byte2Base64(pkEnc);
 
+
         //用DES加密csv文件
         encCCIA.encrypt(originCsv, encryptCsv);
         // CT_key 转为文件存储，和encryptCsv文件，CCPS来取吧。。。
     }
 
+    @Test
+    public void testPath(){
+        String csvPath = this.getClass().getClassLoader().getResource("ccia_blacklist_"+new Date()+".csv").getPath();
+        System.out.println("csv path: "+csvPath);
+//        System.out.println(getClass().getResource("ccia"));
+    }
 
 }
