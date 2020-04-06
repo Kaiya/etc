@@ -4,6 +4,7 @@ import com.icbc.provider.model.Register;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
  * @author Kaiya Xiong
@@ -24,4 +25,6 @@ public interface AccountService {
      * @return 格式为{"balance":999,"orderID","478123","payRequestStatus":1, "failedReason","xxx"}
      */
     Map<String, Object> updateBalance(String cardId, BigDecimal amount, Register register);
+    Future<String> updateBalance(String cardId);
+
 }

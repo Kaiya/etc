@@ -1,0 +1,37 @@
+dubbo:
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+  registry:
+      #   The Spring Cloud Dubbo's registry extension
+    address: zookeeper://localhost:2181
+  cloud:
+    # The subscribed services in consumer side
+    subscribed-services: ${provider.application.name}
+  application:
+    name: Gateway-Dubbo
+  consumer:
+    timeout: 99999
+  reference:
+    id: helloService
+    interface: com.icbc.provider.service.HelloService
+
+
+spring:
+  application:
+    # Dubbo
+    name: Gateway
+  main:
+    # Spring Boot 2.1
+    allow-bean-definition-overriding: true
+  cloud:
+    zookeeper:
+      connect-string: localhost:2181
+      enabled: true
+server:
+  port: 8088
+
+provider:
+  application:
+    name: provider

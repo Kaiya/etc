@@ -1,46 +1,59 @@
 package com.example.ccps;
 
+import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.example.ccps.imp.Auth;
-import com.example.ccps.imp.ClientImper;
-import com.example.ccps.util.CardIdVerifiy;
-import com.example.ccps.util.MoneyCostVerify;
-import com.icbc.provider.service.AccountService;
-import com.icbc.provider.service.BalanceUpdate;
+import com.icbc.provider.service.CommonService;
+import com.icbc.provider.service.HelloService;
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CcpsApplicationTests {
-    @Autowired
-    ClientImper ccps;
-    @Reference
-    AccountService accountService;
-    @Reference
-    BalanceUpdate update;
+
+//    @Reference
+//    HelloService helloService;
+
     @Test
     public void contextLoads() {
-//        ccps.check();
-//        accountService.queryBalance("6212260012987431");
-//        update.balanceUpdate("2213123","6212261311002888",new BigDecimal("2.00"),"000000001",0,"1231231231231","大撒大撒");
 
-//        boolean b = MoneyCostVerify.verifyMoneyCost("2");
-//        System.out.println(b);
-        Map<String, Object> m = CardIdVerifiy.verifyCardId("qwer123456723456");
 
-    }
-    @Test
-    public void testAuth(){
+        // dynamically create interface that extends CommonService
+        ClassPool defaultClassPool = ClassPool.getDefault();
+        Class clazz = null;
         try {
-            System.out.println(Auth.createJWT("xxx", 360000000));
-        } catch (Exception e) {
+            CtClass superInterface = defaultClassPool.getCtClass(CommonService.class
+                    .getName());
+            CtClass demoServiceInterface = defaultClassPool.makeInterface("com.icbc.provider.service.NihaoService", superInterface);
+            clazz = demoServiceInterface.toClass();
+            demoServiceInterface.writeFile("/Users/Kaiya/code/etc/ccps/target/classes/");
+        } catch (CannotCompileException e){
+            e.printStackTrace();
+        } catch (NotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e){
             e.printStackTrace();
         }
+
+        ReferenceConfig<CommonService> reference = new ReferenceConfig<>();
+        reference.setInterface(clazz.getCanonicalName());
+//        reference.setInterface(HelloService.class);
+        CommonService helloService = reference.get();
+        Map<String, Object> input = new HashMap<>();
+        input.put("key", "kaiya");
+        Map<String, Object> output = helloService.execute(input);
+        System.out.println(output.get("result"));
+        assert output.get("result").equals("Nihao, kaiya");
     }
+
 }

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author Kaiya Xiong
@@ -24,8 +27,10 @@ public class BatchBlacklistCsv implements SchedulingConfigurer {
     private String cron = DEFAULT_CRON;
     SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
+
     @Autowired
     BlacklistService blacklistService;
+
 
     // TODO: 2019-08-20 增量更新还是全量更新？
     @Override
